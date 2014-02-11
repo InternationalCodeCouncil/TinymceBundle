@@ -9,18 +9,33 @@ function initTinyMCE(options) {
     // Load when DOM is ready
     domready(function() {
         var i, t = tinymce.editors, textareas = [];
-        for (i in t) {
-            if (t.hasOwnProperty(i)) t[i].remove();
-        }
+
         switch (options.selector.substring(0, 1)) {
             case "#":
+                if(t.hasOwnProperty(options.selector.substring(1))){
+                    t[options.selector.substring(1)].remove();
+                }
+
                 var _t = document.getElementById(options.selector.substring(1));
                 if (_t) textareas.push(_t);
                 break;
             case ".":
                 textareas = getElementsByClassName(options.selector.substring(1), 'textarea');
+
+                for(i in textareas){
+                    if (t.hasOwnProperty(textareas[i].getAttribute('id'))){
+                        t[textareas[i].getAttribute('id')].remove();
+                    }
+                }
+
                 break;
             default :
+                for (i in t) {
+                     if (t.hasOwnProperty(i)){
+                           t[i].remove();
+                     }
+                }
+
                 textareas = document.getElementsByTagName('textarea');
         }
         if (!textareas.length) {
@@ -29,6 +44,7 @@ function initTinyMCE(options) {
 
         var externalPlugins = [];
         // Load external plugins
+        
         if (typeof options.external_plugins == 'object') {
             for (var pluginId in options.external_plugins) {
                 if (!options.external_plugins.hasOwnProperty(pluginId)) {
@@ -45,7 +61,7 @@ function initTinyMCE(options) {
                 }
             }
         }
-
+    
         for (i = 0; i < textareas.length; i++) {
             // Get editor's theme from the textarea data
             var theme = textareas[i].getAttribute("data-theme") || 'simple';
