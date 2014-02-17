@@ -23,7 +23,7 @@ class StfalconTinymceExtension extends Extension
         // Get default configuration of the bundle
         $configuration = $this->processConfiguration(new Configuration(), $configs);
 
-        foreach($configuration as &$config){
+        foreach($configuration['configuration'] as &$config){
             if (empty($config['theme'])) {
                 $config['theme'] = array(
                     'simple' => array()
