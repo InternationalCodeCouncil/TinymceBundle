@@ -46,6 +46,12 @@ This bundle comes with an extension for Twig. This makes it very easy to include
     {{ tinymce_init() }}
 ```
 
+You can also override the default configuration by passing an option like this:
+
+```twig
+    {{ tinymce_init({'use_callback_tinymce_init': true, 'theme': {'simple': {'menubar': false}}}) }}
+```
+
 ## Base configuration
 
 By default, tinymce is enabled for all textareas on the page. If you want to customize it, do the following:
@@ -219,7 +225,7 @@ If you specify a relative path, it is resolved in relation to the URL of the (HT
         ...
         theme:
             simple:
-                content_css: "/bundles/mybundle/css/tinymce-content.css"
+                content_css: "asset[bundles/mybundle/css/tinymce-content.css]"
                 ...
 ```
 
@@ -245,7 +251,7 @@ And then create a javascript callback function named `callback_tinymce_init` as 
 
 ```javascript
 
-function callback_tinymce_init() {
+function callback_tinymce_init(editor) {
     // execute your best script ever
 }
 
