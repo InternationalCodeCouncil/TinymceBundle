@@ -154,6 +154,12 @@ class StfalconTinymceExtension extends \Twig_Extension
                         // After parsing we add them together again.
                         $themeConfig['theme'][$themeName]['content_css'] = implode(',', $cssFiles);
                     }
+
+                    // Parse spellchecker RPC url so we can use 'path[route_name]' in there
+                    if (isset($themeOptions['spellchecker_rpc_url'])) {
+                        $spellCheckerUrl = $this->getRouteUrl($themeOptions['spellchecker_rpc_url']);
+                        $themeConfig['theme'][$themeName]['spellchecker_rpc_url'] = $spellCheckerUrl;
+                    }
                 }
             }
         }
@@ -199,5 +205,25 @@ class StfalconTinymceExtension extends \Twig_Extension
 
         return $inputUrl;
     }
-}
 
+    /**
+     * Generate URL from route name
+     *
+     * @param string $inputUrl
+     *
+     * @return string
+     */
+    protected function getRouteUrl($inputUrl)
+    {
+        $routeName = preg_replace('/^path\[(.+)\]$/i', '$1', $inputUrl);
+
+        if ($inputUrl !== $routeName) {
+            /* @var $router \Symfony\Component\Routing\RouterInterface */
+            $router = $this->getService('router');
+
+            $inputUrl = $router->generate($routeName);
+        }
+
+        return $inputUrl;
+    }
+}
